@@ -1,18 +1,40 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:math';
 //import 'dart:io';
 //import 'dart:js_util';
+import 'package:flutter_launcher_icons/abs/icon_generator.dart';
+import 'package:flutter_launcher_icons/android.dart';
+import 'package:flutter_launcher_icons/constants.dart';
+import 'package:flutter_launcher_icons/custom_exceptions.dart';
+import 'package:flutter_launcher_icons/flutter_launcher_icons_config.dart';
+//import 'package:flutter_launcher_icons/flutter_launcher_icons_config.g.dart';
+import 'package:flutter_launcher_icons/ios.dart';
+import 'package:flutter_launcher_icons/logger.dart';
+import 'package:flutter_launcher_icons/main.dart';
+import 'package:flutter_launcher_icons/pubspec_parser.dart';
+import 'package:flutter_launcher_icons/utils.dart';
+import 'package:flutter_launcher_icons/web/web_icon_generator.dart';
+import 'package:flutter_launcher_icons/web/web_template.dart';
+import 'package:flutter_launcher_icons/windows/windows_icon_generator.dart';
+import 'package:flutter_launcher_icons/xml_templates.dart';
 
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:vibration/vibration.dart';
 import 'package:gap/gap.dart';
 import 'package:animate_gradient/animate_gradient.dart';
+import 'package:simple_animations/simple_animations.dart';
 
 //import 'package:flutter_beautiful_popup/main.dart';
 String backdrop = 'graphicsApp/vibeBackground2c.png';
+String Titlegif = 'graphicsApp/GoodVibesColored.gif';
 String Mode = "M";
 int waitTime = 500;
 bool ok = true;
+var posx;
+var posy;
+//Offset _tapPosition;
 // ignore: deprecated_member_use
 List<int> recordList = new List<int>.filled(1, 0, growable: true);
 
@@ -29,176 +51,265 @@ class Myapp extends StatefulWidget {
 
 class _MyappState extends State<Myapp> {
   Widget build(BuildContext context) {
-    return MaterialApp(home: _Home());
+    return MaterialApp(home: OpeningTitle());
   }
 }
 
-class _Home extends StatelessWidget {
+class _Home extends StatefulWidget {
+  @override
+  State<_Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<_Home> {
   bool firstit = true;
+
   Stopwatch stopwatch = Stopwatch();
+
   Stopwatch Pausewatch = Stopwatch();
+
+  Stopwatch Controlwatch = Stopwatch();
+
   int delay = 0;
+
+  int delayTp = 0;
+
   int pressed = 0;
+
+  bool Ontap = false;
+
   final Timer clk = Timer(
     const Duration(minutes: 10),
     () {},
   );
+
   int i = -1;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
             //backgroundColor: Color.fromARGB(255, 255, 204, 0),
             body: Center(
-      child: GestureDetector(
+                child: GestureDetector(
+      child: AnimateGradient(
+        /* primaryBegin: Alignment.topLeft,
+       primaryEnd: Alignment.topRight,
+       secondaryBegin: Alignment.topRight,
+       secondaryEnd: Alignment.topLeft,*/
+        primaryColors: const [
+          //Color.fromARGB(255, 128, 0, 139),
+          //Color.fromARGB(255, 154, 0, 172),
+          Color.fromARGB(255, 177, 0, 226),
+          Color.fromARGB(255, 255, 66, 252),
+          Color.fromARGB(255, 246, 141, 255),
+          Color.fromARGB(255, 250, 128, 219),
+          Color.fromARGB(255, 255, 188, 246),
+        ],
+        secondaryColors: const [
+          Color.fromARGB(255, 255, 188, 246),
+          Color.fromARGB(255, 255, 151, 229),
+          Color.fromARGB(255, 246, 141, 255),
+          Color.fromARGB(255, 255, 66, 252),
+          Color.fromARGB(255, 177, 0, 226),
+          // Color.fromARGB(255, 154, 0, 172),
+          //Color.fromARGB(255, 128, 0, 139),
+        ],
         child: Container(
-            child: Stack(children: [
-              Align(
-                alignment: AlignmentDirectional.topEnd,
-                child: GestureDetector(
-                  child: Container(
-                    color: Color.fromARGB(0, 0, 0, 0),
-                    height: 2732,
-                    width: 35,
-                  ),
-                  onTap: () {
-                    print("black");
-                    Vibration.cancel();
-                    recordList.clear();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const SecondRoute()),
-                    );
-                  },
+          child: Stack(children: [
+            Align(
+              alignment: AlignmentDirectional.topEnd,
+              child: GestureDetector(
+                child: Container(
+                  color: Color.fromARGB(0, 0, 0, 0),
+                  height: 2732,
+                  width: 35,
                 ),
+                onTap: () {
+                  print("black");
+                  Vibration.cancel();
+                  recordList.clear();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SecondRoute()),
+                  );
+                },
               ),
-              Align(
-                alignment: AlignmentDirectional.topStart,
-                child: GestureDetector(
-                  child: Container(
-                    color: Color.fromARGB(0, 250, 0, 0),
-                    height: 2732,
-                    width: 35,
-                  ),
-                  onTap: () {
-                    Vibration.cancel();
-                    print("red");
-                    R_action();
-                    firstit = true;
-                    recordList.clear();
-                  },
+            ),
+            Align(
+              alignment: AlignmentDirectional.topStart,
+              child: GestureDetector(
+                child: Container(
+                  color: Color.fromARGB(0, 250, 0, 0),
+                  height: 2732,
+                  width: 35,
                 ),
-              )
-            ]),
-            height: 2732,
-            width: 2048,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
+                onTap: () {
+                  Vibration.cancel();
+                  print("red");
+                  R_action();
+                  Pausewatch.reset();
+                  firstit = true;
+                  recordList.clear();
+                },
+              ),
+            )
+          ]),
+          height: 2732,
+          width: 2048,
+          alignment: Alignment.center,
+          /*decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(backdrop),
                 fit: BoxFit.fill,
                 //scale: 0.8
               ),
-            )),
-        onTap: () {
-          if (Mode == "M") {
-            action(1);
-          } else if (Mode == "R") {
-            recordList.add(90);
-
-            if (!firstit) {
-              Pausewatch.stop();
-              delay = Pausewatch.elapsedMilliseconds;
-              if (delay <= 10) {
-                delay = 25;
-              }
-              Pausewatch.reset();
-              recordList.add(delay);
-            }
-
-            if (firstit) {
-              firstit = false;
-            }
-
-            Pausewatch.start();
-            print(recordList);
-          } else if (Mode == "L") {
-            if (pressed % 2 == 0) {
-              print(pressed);
-              pressed += 1;
-              ok = true;
-              loopVibrate(clk);
-            } else {
-              //clk.cancel();
-              ok = false;
-              Vibration.cancel();
-              print(pressed);
-              pressed += 1;
-            }
-          }
-        },
-        onLongPressDown: (details) {
-          if (Mode == "M") {
-            action(2);
-          } else if (Mode == "R") {
-            if (!firstit) {
-              Pausewatch.stop();
-              delay = Pausewatch.elapsedMilliseconds;
-              if (delay <= 10) {
-                delay = 25;
-              }
-              Pausewatch.reset();
-            }
-            print("mf");
-            if (firstit) {
-              firstit = false;
-            }
-            stopwatch.reset();
-            //clock.startCount();
-            stopwatch.start();
-          } else if (Mode == "L") {}
-        },
-        onLongPressUp: () {
-          if (Mode == "M") {
-            Vibration.cancel();
-          } else if (Mode == "R") {
-            stopwatch.stop();
-            var lenghtVibe = stopwatch.elapsedMilliseconds;
-            stopwatch.reset();
-            //var lenghtVibe = clock.getTime();
-            if (lenghtVibe > 10000) {
-              lenghtVibe = 10000;
-            }
-            recordList.add(lenghtVibe);
-
-            if (!firstit) {
-              recordList.add(delay);
-              Pausewatch.reset();
-              Pausewatch.reset();
-            }
-            Pausewatch.start();
-
-            //clock.reset();
-            //print(lenghtVibe);
-            print(recordList);
-          } else if (Mode == "L") {
-            if (pressed % 2 == 0) {
-              print(pressed);
-              pressed += 1;
-              ok = true;
-              loopVibrate(clk);
-            } else {
-              //clk.cancel();
-              ok = false;
-              Vibration.cancel();
-              print(pressed);
-              pressed += 1;
-            }
-          }
-        },
+            )*/
+        ),
       ),
-    )));
+      onTapDown: (TapDownDetails details) {
+        var position = details.globalPosition;
+        //print(position);
+        //print("eosfsfsf");
+        posx = position.dx;
+        posy = position.dy;
+
+        /*final RenderObject referenceBox = context.findRenderObject();
+        setState(() {
+          _tapPosition = referenceBox.globalToLocal(details.globalPosition);
+        });*/
+      },
+      onTap: () {
+        if (Mode == "M") {
+          action(1);
+        } else if (Mode == "R") {
+          Ontap = true;
+          recordList.add(90);
+
+          if (!firstit) {
+            Pausewatch.stop();
+            delayTp = Pausewatch.elapsedMilliseconds;
+            print(delayTp);
+            if (delayTp <= 10) {
+              delayTp = 25;
+            }
+            recordList.add(delayTp);
+            Pausewatch.reset();
+          }
+
+          if (firstit) {
+            recordList.add(0);
+            firstit = false;
+          }
+          Pausewatch.start();
+          print(recordList);
+          Ontap = false;
+        } else if (Mode == "L") {
+          if (pressed % 2 == 0) {
+            print(pressed);
+            pressed += 1;
+            ok = true;
+            loopVibrate(clk);
+          } else {
+            //clk.cancel();
+            ok = false;
+            Vibration.cancel();
+            print(pressed);
+            pressed += 1;
+          }
+        }
+      },
+      onLongPressDown: (details) {
+        Controlwatch.start();
+        int c = 0;
+        if (Mode == "M") {
+          action(2);
+        } else if (Mode == "R") {
+          if (!firstit) {
+            Pausewatch.stop();
+            delay = Pausewatch.elapsedMilliseconds;
+            if (delay <= 10) {
+              delay = 25;
+            }
+            if (!Ontap) {
+              //Pausewatch.reset();
+              print("mofof");
+            }
+          }
+
+          if (firstit) {
+            firstit = false;
+          }
+          stopwatch.reset();
+          //clock.startCount();
+          stopwatch.start();
+        } else if (Mode == "L") {}
+      },
+      onLongPressUp: () {
+        if (Mode == "M") {
+          Vibration.cancel();
+        } else if (Mode == "R") {
+          Pausewatch.reset();
+          stopwatch.stop();
+          var lenghtVibe = stopwatch.elapsedMilliseconds;
+          stopwatch.reset();
+          //var lenghtVibe = clock.getTime();
+          if (lenghtVibe > 10000) {
+            lenghtVibe = 10000;
+          }
+          recordList.add(lenghtVibe);
+
+          if (!firstit) {
+            recordList.add(delay);
+            Pausewatch.reset();
+            Pausewatch.reset();
+          }
+          Pausewatch.start();
+
+          //clock.reset();
+          //print(lenghtVibe);
+          print(recordList);
+        } else if (Mode == "L") {
+          if (pressed % 2 == 0) {
+            print(pressed);
+            pressed += 1;
+            ok = true;
+            loopVibrate(clk);
+          } else {
+            //clk.cancel();
+            ok = false;
+            Vibration.cancel();
+            print(pressed);
+            pressed += 1;
+          }
+        }
+      },
+    ))));
+  }
+}
+
+class OpeningTitle extends StatelessWidget {
+  const OpeningTitle({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: GestureDetector(
+      child: Container(
+          decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(Titlegif),
+          fit: BoxFit.fitHeight,
+          //scale: 0.8
+        ),
+      )),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => _Home()),
+        );
+      },
+    ));
   }
 }
 
@@ -215,8 +326,8 @@ class SecondRoute extends StatelessWidget {
        secondaryBegin: Alignment.topRight,
        secondaryEnd: Alignment.topLeft,*/
           primaryColors: const [
-            Color.fromARGB(255, 128, 0, 139),
-            Color.fromARGB(255, 154, 0, 172),
+            // Color.fromARGB(255, 128, 0, 139),
+            //Color.fromARGB(255, 154, 0, 172),
             Color.fromARGB(255, 177, 0, 226),
             Color.fromARGB(255, 255, 66, 252),
             Color.fromARGB(255, 246, 141, 255),
@@ -229,8 +340,8 @@ class SecondRoute extends StatelessWidget {
             Color.fromARGB(255, 246, 141, 255),
             Color.fromARGB(255, 255, 66, 252),
             Color.fromARGB(255, 177, 0, 226),
-            Color.fromARGB(255, 154, 0, 172),
-            Color.fromARGB(255, 128, 0, 139),
+            // Color.fromARGB(255, 154, 0, 172),
+            //Color.fromARGB(255, 128, 0, 139),
           ],
           child: Container(
             height: 2732,
@@ -290,7 +401,6 @@ class SecondRoute extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                             primary: Color.fromARGB(255, 255, 133, 228),
                             elevation: 0,
-                            
                             shape: RoundedRectangleBorder(
 
                                 //to set border radius to button
@@ -368,7 +478,7 @@ void loopVibrate(Timer t) {
   });
 }
 
-class timer {
+class _timer {
   int firstvalue = 0;
   int secondvalue = 0;
   void startCount() {
@@ -416,7 +526,7 @@ List<int> prepareList(List<int> l) {
   }
   return modified;
 }
-
+/*
 final ButtonStyle flatButtonStyle = TextButton.styleFrom(
   foregroundColor: Color.fromARGB(221, 0, 255, 255),
   minimumSize: Size(100, 100),
@@ -447,4 +557,38 @@ class FloatingText extends AnimatedText {
   void initAnimation(AnimationController controller) {
     // TODO: implement initAnimation
   }
-}
+}*/
+/*
+class ParticleModel {
+  Animatable tween;
+  double size;
+  AnimationProgress animationProgress;
+  Random random;
+
+  ParticleModel(this.random) {
+    restart();
+  }
+
+  restart({Duration time = Duration.zero}) {
+    final startPosition = Offset(-0.2 + 1.4 * random.nextDouble(), 1.2);
+    final endPosition = Offset(-0.2 + 1.4 * random.nextDouble(), -0.2);
+    final duration = Duration(milliseconds: 500 + random.nextInt(1000));
+
+    tween = MultiTween([
+      Track("x").add(
+          duration, Tween(begin: startPosition.dx, end: endPosition.dx),
+          curve: Curves.easeInOutSine),
+      Track("y").add(
+          duration, Tween(begin: startPosition.dy, end: endPosition.dy),
+          curve: Curves.easeIn),
+    ]);
+    animationProgress = AnimationProgress(duration: duration, startTime: time);
+    size = 0.2 + random.nextDouble() * 0.4;
+  }
+
+  maintainRestart(Duration time) {
+    if (animationProgress.progress(time) == 1.0) {
+      restart(time: time);
+    }
+  }
+}*/
