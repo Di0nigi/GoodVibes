@@ -40,7 +40,7 @@ int waitTime = 500;
 bool ok = true;
 var posx;
 var posy;
-bool GlobalShow = true;
+bool GlobalShow = false;
 
 //Offset _tapPosition;
 // ignore: deprecated_member_use
