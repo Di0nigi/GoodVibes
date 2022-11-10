@@ -32,8 +32,6 @@ dependencies:
   
   flutter:
     sdk: flutter
-
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -44,6 +42,10 @@ dependencies:
   animate_gradient: ^0.0.2
   simple_animations: ^5.0.0+2
   flutter_launcher_icons: ^0.10.0
+  thread: ^0.2.1
+  threading: ^0.0.10
+  flutter_screenutil: ^5.6.0
+  
  
 
 flutter_icons:
@@ -66,9 +68,19 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
+
+
+
 flutter:
   assets:
         [graphicsApp/vibeBackground2c.png,'graphicsApp/GoodVibesColored.gif']
+  fonts: 
+    - family: Theboldfont
+      fonts:
+      - asset: graphicsApp/fonts/theboldfont.ttf
+    - family: Alba
+      fonts:
+        - asset: graphicsApp/fonts/ALBAS__.TTF
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

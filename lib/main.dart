@@ -1,6 +1,11 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 import 'dart:io';
+import "dart:ui";
 import 'dart:math';
+import "dart:isolate";
+
 //import 'dart:io';
 //import 'dart:js_util';
 import 'package:flutter_launcher_icons/abs/icon_generator.dart';
@@ -8,6 +13,7 @@ import 'package:flutter_launcher_icons/android.dart';
 import 'package:flutter_launcher_icons/constants.dart';
 import 'package:flutter_launcher_icons/custom_exceptions.dart';
 import 'package:flutter_launcher_icons/flutter_launcher_icons_config.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 //import 'package:flutter_launcher_icons/flutter_launcher_icons_config.g.dart';
 import 'package:flutter_launcher_icons/ios.dart';
 import 'package:flutter_launcher_icons/logger.dart';
@@ -34,12 +40,14 @@ int waitTime = 500;
 bool ok = true;
 var posx;
 var posy;
+bool GlobalShow = true;
+
 //Offset _tapPosition;
 // ignore: deprecated_member_use
 List<int> recordList = new List<int>.filled(1, 0, growable: true);
 
 void main() {
-  runApp(Myapp());
+  runApp(const Myapp());
 }
 
 class Myapp extends StatefulWidget {
@@ -86,16 +94,18 @@ class _HomeState extends State<_Home> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return MaterialApp(
         home: Scaffold(
             //backgroundColor: Color.fromARGB(255, 255, 204, 0),
             body: Center(
                 child: GestureDetector(
       child: AnimateGradient(
-        /* primaryBegin: Alignment.topLeft,
-       primaryEnd: Alignment.topRight,
-       secondaryBegin: Alignment.topRight,
-       secondaryEnd: Alignment.topLeft,*/
+        /* primaryBegin: Alignment.topCenter,
+       primaryEnd: Alignment.centerRight,
+      secondaryBegin: Alignment.centerLeft,
+       secondaryEnd: Alignment.bottomCenter,*/
         primaryColors: const [
           //Color.fromARGB(255, 128, 0, 139),
           //Color.fromARGB(255, 154, 0, 172),
@@ -117,43 +127,104 @@ class _HomeState extends State<_Home> {
         child: Container(
           child: Stack(children: [
             Align(
-              alignment: AlignmentDirectional.topEnd,
-              child: GestureDetector(
-                child: Container(
-                  color: Color.fromARGB(0, 0, 0, 0),
-                  height: 2732,
-                  width: 35,
-                ),
-                onTap: () {
-                  print("black");
-                  Vibration.cancel();
-                  recordList.clear();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SecondRoute()),
-                  );
-                },
-              ),
-            ),
-            Align(
-              alignment: AlignmentDirectional.topStart,
-              child: GestureDetector(
-                child: Container(
-                  color: Color.fromARGB(0, 250, 0, 0),
-                  height: 2732,
-                  width: 35,
-                ),
-                onTap: () {
-                  Vibration.cancel();
-                  print("red");
-                  R_action();
-                  Pausewatch.reset();
-                  firstit = true;
-                  recordList.clear();
-                },
-              ),
-            )
+                alignment: AlignmentDirectional.bottomEnd,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(0, 0, 9, 13),
+                  child: GestureDetector(
+                    child: Container(
+                      child: Padding(
+                          padding: EdgeInsets.all(6),
+                          child: Text(
+                            'M',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                // shadows:[Shadow(color: Color.fromARGB(255, 108, 0, 106), offset: Offset(2,1), blurRadius:10)],
+                                color: Color.fromARGB(150, 255, 255, 255),
+                                fontSize: 25,
+                                fontFamily: 'Alba'),
+                          )),
+                      decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                                blurRadius: 10,
+                                color: Color.fromARGB(15, 111, 0, 87),
+                                offset: Offset.fromDirection(10),
+                                blurStyle: BlurStyle.outer)
+                          ],
+                          border: Border.all(
+                              color: Color.fromARGB(0, 255, 151, 229)),
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(23),
+                              bottomRight: Radius.circular(23),
+                              topLeft: Radius.circular(23),
+                              bottomLeft: Radius.circular(23)),
+                          color: Color.fromARGB(40, 255, 162, 232)),
+                      //color: Color.fromARGB(255, 0, 0, 0),
+                      height: 55,
+                      width: 55,
+                    ),
+                    onTap: () {
+                      print("black");
+                      Vibration.cancel();
+                      recordList.clear();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SecondRoute()),
+                      );
+                    },
+                  ),
+                )),
+            Visibility(
+                visible: GlobalShow,
+                child: Align(
+                  alignment: AlignmentDirectional.bottomEnd,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(0, 0, 8, 75),
+                    child: GestureDetector(
+                      child: Container(
+                        child: Padding(
+                          padding: EdgeInsets.all(6),
+                          child: Text(
+                            'R',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                // shadows:[Shadow(color: Color.fromARGB(255, 108, 0, 106), offset: Offset(2,1), blurRadius:10)],
+                                color: Color.fromARGB(150, 255, 255, 255),
+                                fontSize: 25,
+                                fontFamily: 'Alba'),
+                          ),
+                        ),
+                        decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                  blurRadius: 10,
+                                  color: Color.fromARGB(15, 111, 0, 87),
+                                  offset: Offset.fromDirection(10),
+                                  blurStyle: BlurStyle.outer)
+                            ],
+                            border: Border.all(
+                                color: Color.fromARGB(0, 255, 151, 229)),
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(23),
+                                bottomRight: Radius.circular(23),
+                                topLeft: Radius.circular(23),
+                                bottomLeft: Radius.circular(23)),
+                            color: Color.fromARGB(40, 255, 162, 232)),
+                        height: 55,
+                        width: 55,
+                      ),
+                      onTap: () {
+                        Vibration.cancel();
+                        print("red");
+                        R_action();
+                        Pausewatch.reset();
+                        firstit = true;
+                        recordList.clear();
+                      },
+                    ),
+                  ),
+                ))
           ]),
           height: 2732,
           width: 2048,
@@ -173,7 +244,8 @@ class _HomeState extends State<_Home> {
         //print("eosfsfsf");
         posx = position.dx;
         posy = position.dy;
-
+        //Particlegen p = Particlegen(posx, posy);
+        //p.run();
         /*final RenderObject referenceBox = context.findRenderObject();
         setState(() {
           _tapPosition = referenceBox.globalToLocal(details.globalPosition);
@@ -318,6 +390,10 @@ class SecondRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    double gap = ((height / 3) / 2 - 40);
+    print(gap);
     return Scaffold(
       body: Center(
         child: AnimateGradient(
@@ -373,7 +449,7 @@ class SecondRoute extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 //mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Gap(150),
+                  Gap(gap),
                   SizedBox(
                       height: 80, //height of button
                       width: 115, //width of button
@@ -387,13 +463,14 @@ class SecondRoute extends StatelessWidget {
                           ),
                           child: const Text("Mimic"),
                           onPressed: () {
+                            GlobalShow = false;
                             Mode = "M";
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => _Home()),
                             );
                           })),
-                  Gap(150),
+                  Gap(2 * gap),
                   SizedBox(
                       height: 80, //height of button
                       width: 115, //width of button
@@ -408,13 +485,14 @@ class SecondRoute extends StatelessWidget {
                           ),
                           child: const Text("Record"),
                           onPressed: () {
+                            GlobalShow = true;
                             Mode = "R";
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => _Home()),
                             );
                           })),
-                  Gap(150),
+                  Gap(2 * gap),
                   SizedBox(
                       height: 80, //height of button
                       width: 115, //width of button
@@ -428,6 +506,7 @@ class SecondRoute extends StatelessWidget {
                           ),
                           child: const Text("Forever"),
                           onPressed: () {
+                            GlobalShow = false;
                             Mode = "L";
                             Navigator.push(
                               context,
@@ -526,6 +605,40 @@ List<int> prepareList(List<int> l) {
   }
   return modified;
 }
+
+class Particlegen {
+  var coorx;
+  var coory;
+  bool flag = true;
+
+  Particlegen(var x, var y) {
+    coorx = x;
+    coory = y;
+  }
+  void run() async {
+    Isolate.spawn(body, "");
+  }
+
+  void body(String st) {
+    while (true) {
+      if (!flag) {
+        break;
+      }
+    }
+  }
+
+  void stop() {
+    flag = false;
+  }
+}
+
+
+
+
+
+
+
+
 /*
 final ButtonStyle flatButtonStyle = TextButton.styleFrom(
   foregroundColor: Color.fromARGB(221, 0, 255, 255),
