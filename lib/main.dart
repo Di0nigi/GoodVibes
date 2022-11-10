@@ -6,8 +6,8 @@ import "dart:ui";
 import 'dart:math';
 import "dart:isolate";
 
-//import 'dart:io';
-//import 'dart:js_util';
+//import 'package:flutter_p2p/flutter_p2p.dart';
+
 import 'package:flutter_launcher_icons/abs/icon_generator.dart';
 import 'package:flutter_launcher_icons/android.dart';
 import 'package:flutter_launcher_icons/constants.dart';
@@ -41,6 +41,7 @@ bool ok = true;
 var posx;
 var posy;
 bool GlobalShow = false;
+bool GlobalShowConnect = false;
 
 //Offset _tapPosition;
 // ignore: deprecated_member_use
@@ -224,7 +225,57 @@ class _HomeState extends State<_Home> {
                       },
                     ),
                   ),
-                ))
+                )),
+            /*Visibility(
+                visible: GlobalShowConnect,
+                child: Align(
+                  alignment: AlignmentDirectional.bottomEnd,
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(0, 0, 8, 75),
+                    child: GestureDetector(
+                      child: Container(
+                        child: Padding(
+                          padding: EdgeInsets.all(6),
+                          child: Text(
+                            'C',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                // shadows:[Shadow(color: Color.fromARGB(255, 108, 0, 106), offset: Offset(2,1), blurRadius:10)],
+                                color: Color.fromARGB(150, 255, 255, 255),
+                                fontSize: 25,
+                                fontFamily: 'Alba'),
+                          ),
+                        ),
+                        decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                  blurRadius: 10,
+                                  color: Color.fromARGB(15, 111, 0, 87),
+                                  offset: Offset.fromDirection(10),
+                                  blurStyle: BlurStyle.outer)
+                            ],
+                            border: Border.all(
+                                color: Color.fromARGB(0, 255, 151, 229)),
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(23),
+                                bottomRight: Radius.circular(23),
+                                topLeft: Radius.circular(23),
+                                bottomLeft: Radius.circular(23)),
+                            color: Color.fromARGB(40, 255, 162, 232)),
+                        height: 55,
+                        width: 55,
+                      ),
+                      onTap: () {
+                        Vibration.cancel();
+                        print("blue");
+                        R_action();
+                        Pausewatch.reset();
+                        firstit = true;
+                        recordList.clear();
+                      },
+                    ),
+                  ),
+                ))*/
           ]),
           height: 2732,
           width: 2048,
@@ -455,13 +506,19 @@ class SecondRoute extends StatelessWidget {
                       width: 115, //width of button
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: Color.fromARGB(255, 255, 133, 228),
+                            primary: Color.fromARGB(120, 255, 156, 234),
                             elevation: 0,
                             shape: RoundedRectangleBorder(
                                 //to set border radius to button
-                                borderRadius: BorderRadius.circular(20)),
+                                borderRadius: BorderRadius.circular(22)),
                           ),
-                          child: const Text("Mimic"),
+                          child: const Text("Mimic",
+                              style: TextStyle(
+                                  // shadows:[Shadow(color: Color.fromARGB(255, 108, 0, 106), offset: Offset(2,1), blurRadius:10)],
+                                  color: Color.fromARGB(150, 255, 255, 255),
+                                  letterSpacing: 0.9,
+                                  fontSize: 22,
+                                  fontFamily: 'Alba')),
                           onPressed: () {
                             GlobalShow = false;
                             Mode = "M";
@@ -476,14 +533,20 @@ class SecondRoute extends StatelessWidget {
                       width: 115, //width of button
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: Color.fromARGB(255, 255, 133, 228),
+                            primary: Color.fromARGB(120, 255, 156, 234),
                             elevation: 0,
                             shape: RoundedRectangleBorder(
 
                                 //to set border radius to button
-                                borderRadius: BorderRadius.circular(20)),
+                                borderRadius: BorderRadius.circular(22)),
                           ),
-                          child: const Text("Record"),
+                          child: const Text("Record",
+                              style: TextStyle(
+                                  // shadows:[Shadow(color: Color.fromARGB(255, 108, 0, 106), offset: Offset(2,1), blurRadius:10)],
+                                  color: Color.fromARGB(150, 255, 255, 255),
+                                  letterSpacing: 0.9,
+                                  fontSize: 22,
+                                  fontFamily: 'Alba')),
                           onPressed: () {
                             GlobalShow = true;
                             Mode = "R";
@@ -498,13 +561,19 @@ class SecondRoute extends StatelessWidget {
                       width: 115, //width of button
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: Color.fromARGB(255, 255, 133, 228),
+                            primary: Color.fromARGB(120, 255, 156, 234),
                             elevation: 0,
                             shape: RoundedRectangleBorder(
                                 //to set border radius to button
-                                borderRadius: BorderRadius.circular(20)),
+                                borderRadius: BorderRadius.circular(22)),
                           ),
-                          child: const Text("Forever"),
+                          child: const Text("Forever",
+                              style: TextStyle(
+                                  // shadows:[Shadow(color: Color.fromARGB(255, 108, 0, 106), offset: Offset(2,1), blurRadius:10)],
+                                  color: Color.fromARGB(150, 255, 255, 255),
+                                  letterSpacing: 0.9,
+                                  fontSize: 22,
+                                  fontFamily: 'Alba')),
                           onPressed: () {
                             GlobalShow = false;
                             Mode = "L";
