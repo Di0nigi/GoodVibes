@@ -73,7 +73,7 @@ dev_dependencies:
 
 flutter:
   assets:
-        [graphicsApp/vibeBackground2c.png,'graphicsApp/GoodVibesColored.gif']
+        [graphicsApp/vibeBackground2c.png,'graphicsApp/TitlegifCOloredHD.gif']
   fonts: 
     - family: Theboldfont
       fonts:

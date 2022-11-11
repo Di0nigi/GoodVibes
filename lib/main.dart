@@ -34,7 +34,7 @@ import 'package:simple_animations/simple_animations.dart';
 
 //import 'package:flutter_beautiful_popup/main.dart';
 String backdrop = 'graphicsApp/vibeBackground2c.png';
-String Titlegif = 'graphicsApp/GoodVibesColored.gif';
+String Titlegif = 'graphicsApp/TitlegifCOloredHD.gif';
 String Mode = "M";
 int waitTime = 500;
 bool ok = true;
